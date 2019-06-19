@@ -81,8 +81,6 @@ public class SpotifyClient {
 			System.out.println("Successfully logged into the server");
 			isClientConnected = true;
 			writer.println(email);
-
-			//verify login on server
 			
 			ClientRunnable clientRunnable = new ClientRunnable(socket);
 			new Thread(clientRunnable).start();

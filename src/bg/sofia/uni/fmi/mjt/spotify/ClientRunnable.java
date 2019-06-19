@@ -46,6 +46,7 @@ public class ClientRunnable implements Runnable {
 					}
 					if (line.equals(Commands.STOP.getCommandName())) {
 						stopSong();
+						continue;
 					}
 					if (line.equals(Commands.DISCONNECT.getCommandName())) {
 						socket.close();
@@ -88,16 +89,19 @@ public class ClientRunnable implements Runnable {
 
 			DataInputStream receiver = new DataInputStream(socket.getInputStream());
 
-			while ((bytesRead = receiver.read(bytesBuffer)) != -1 && isSongPlaying == true) {
+			while (isSongPlaying == true && (bytesRead = receiver.read(bytesBuffer)) != -1) {
 				audioLine.write(bytesBuffer, 0, bytesRead);
+				if(bytesRead < 4096) {
+					stopSong();
+				}
 			}
-
+			
 			if (isSongPlaying == false) {
 				System.out.println("Song stopped playing");
 			} else {
 				isSongPlaying = false;
 			}
-
+			
 			audioLine.drain();
 			audioLine.close();
 

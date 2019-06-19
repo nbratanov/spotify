@@ -86,8 +86,6 @@ public class SpotifyServer {
 
 				String email = reader.readLine();
 				if (email != null) {
-
-//					BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 					
 					loggedUsers.put(email, socket);
 					System.out.println(email + " logged into the server");

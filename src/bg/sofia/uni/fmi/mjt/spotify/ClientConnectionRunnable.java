@@ -27,12 +27,12 @@ public class ClientConnectionRunnable implements Runnable {
 
 	private String email;
 	private Socket socket;
-	private boolean isSongPlaying;
+	private static boolean isSongPlaying;
 
 	public ClientConnectionRunnable(String email, Socket socket) {
 		this.email = email;
 		this.socket = socket;
-		this.isSongPlaying = false;
+		isSongPlaying = false;
 	}
 
 	@Override
@@ -42,9 +42,9 @@ public class ClientConnectionRunnable implements Runnable {
 
 			while (true) {
 				String commandInput = reader.readLine();
-
+				System.out.println(commandInput);
+				
 				if (commandInput != null) {
-					System.out.println(commandInput);
 					String[] tokens = commandInput.split(" ");
 					String command = tokens[0];
 
@@ -60,7 +60,7 @@ public class ClientConnectionRunnable implements Runnable {
 					}
 					if (command.equals(Commands.PLAY.getCommandName())) {
 						String songName = transformInput(tokens, 1);
-						play(songName, writer);
+						play(songName, writer, reader);
 					}
 					if (command.equals(Commands.STOP.getCommandName())) {
 						stopSong(writer);
@@ -110,7 +110,7 @@ public class ClientConnectionRunnable implements Runnable {
 		}
 	}
 
-	public void play(String songName, PrintWriter writer) {
+	public void play(String songName, PrintWriter writer, BufferedReader reader) {
 
 		boolean ifSongExists = false;
 		File[] files = new File(FOLDER_PATH).listFiles();
@@ -138,9 +138,8 @@ public class ClientConnectionRunnable implements Runnable {
 			int bytesRead = -1;
 			isSongPlaying = true;
 
-			// problem with socket, not the correct way
 			DataOutputStream sender = new DataOutputStream(socket.getOutputStream());
-			while ((bytesRead = audioStream.read(bytesBuffer)) != -1 && isSongPlaying == true) {
+			while (isSongPlaying == true && (bytesRead = audioStream.read(bytesBuffer)) != -1) {
 				sender.write(bytesBuffer, 0, bytesRead);
 			}
 
@@ -153,8 +152,8 @@ public class ClientConnectionRunnable implements Runnable {
 			System.out.println("Error playing the audio file");
 		}
 	}
-
-	public void stopSong(PrintWriter writer) {
+		
+	public static void stopSong(PrintWriter writer) {
 		isSongPlaying = false;
 		writer.println(Commands.STOP.getCommandName());
 	}
