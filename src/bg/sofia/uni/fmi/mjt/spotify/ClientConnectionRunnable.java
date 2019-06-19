@@ -220,13 +220,13 @@ public class ClientConnectionRunnable implements Runnable {
 	}
 
 	private String transformInput(String[] commandInput, int startIndex) {
-		StringBuilder songName = new StringBuilder();
+		StringBuilder result = new StringBuilder();
 		for (int i = startIndex; i < commandInput.length; i++) {
-			songName.append(commandInput[i]);
+			result.append(commandInput[i]);
 			if (i != commandInput.length - 1) {
-				songName.append(" ");
+				result.append(" ");
 			}
 		}
-		return songName.toString();
+		return result.toString();
 	}
 }
