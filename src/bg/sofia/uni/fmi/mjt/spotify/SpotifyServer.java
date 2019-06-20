@@ -8,6 +8,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
@@ -45,7 +46,7 @@ public class SpotifyServer {
 		return SUCCESSFUL_MESSAGE + email;
 	}
 
-	public synchronized static String validatePassword(String user) {
+	private synchronized String validatePassword(String user) {
 		File usersFile = new File(USERS_PATH);
 		try (BufferedReader bufferedReader = new BufferedReader(new FileReader(usersFile))) {
 			String line = null;
@@ -83,14 +84,16 @@ public class SpotifyServer {
 				System.out.println("Client connected to the server: " + socket.getInetAddress());
 
 				BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+				PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
 
-				String email = reader.readLine();
+				String userDetails = reader.readLine();
+				String email = approveLogin(userDetails, writer);
+
 				if (email != null) {
-					
+
 					loggedUsers.put(email, socket);
 					System.out.println(email + " logged into the server");
 
-					
 					ClientConnectionRunnable clientConnectionRunnable = new ClientConnectionRunnable(email, socket);
 					new Thread(clientConnectionRunnable).start();
 				}
@@ -99,6 +102,31 @@ public class SpotifyServer {
 		} catch (IOException e) {
 			System.out.println("There was a problem when trying to connect to the server");
 		}
+	}
+
+	private String approveLogin(String userDetails, PrintWriter writer) {
+
+		String[] tokens = userDetails.split(" ");
+		String email = tokens[0];
+		String password = tokens[1];
+
+		String realPassword = validatePassword(email);
+		if (realPassword == null) {
+			writer.println("There is not a user registered with that email");
+			return null;
+		}
+		if (!password.equals(realPassword)) {
+			writer.println("The password you entered is incorrect");
+			return null;
+		}
+
+		if (SpotifyServer.getLoggedUsers().containsKey(email)) {
+			writer.println("Someone is already logged into this email");
+			return null;
+		}
+
+		writer.println("Successfully logged into the server");
+		return email;
 	}
 
 	public static void main(String[] args) {

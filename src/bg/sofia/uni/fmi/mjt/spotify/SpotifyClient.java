@@ -1,6 +1,8 @@
 package bg.sofia.uni.fmi.mjt.spotify;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -10,8 +12,10 @@ public class SpotifyClient {
 
 	private static final String HOST = "localhost";
 	private static final int PORT = 8080;
+	private static final String VALIDATION_MESSAGE = "Successfully logged into the server";
 
 	private PrintWriter writer;
+	private BufferedReader reader;
 	private boolean isClientConnected = false;
 
 	public void run() {
@@ -55,35 +59,29 @@ public class SpotifyClient {
 
 	public void login(String[] commandInput) {
 
-		String email = commandInput[1];
-		String password = commandInput[2];
-
-		String realPassword = SpotifyServer.validatePassword(email);
-		if (realPassword == null) {
-			System.out.println("There is not a user registered with that email");
-			return;
-		}
-		if (!password.equals(realPassword)) {
-			System.out.println("The password you entered is incorrect");
-			return;
-		}
-
-		if (SpotifyServer.getLoggedUsers().containsKey(email)) {
-			System.out.println("Someone is already logged into this email");
-			return;
-		}
-
 		try {
 
 			Socket socket = new Socket(HOST, PORT);
+			reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			writer = new PrintWriter(socket.getOutputStream(), true);
 
-			System.out.println("Successfully logged into the server");
-			isClientConnected = true;
-			writer.println(email);
-			
-			ClientRunnable clientRunnable = new ClientRunnable(socket);
-			new Thread(clientRunnable).start();
+			String email = commandInput[1];
+			String password = commandInput[2];
+
+			writer.println(email + " " + password);
+
+			String validationMessage = reader.readLine();
+			System.out.println(validationMessage);
+
+			if (validationMessage.equals(VALIDATION_MESSAGE)) {
+
+				isClientConnected = true;
+				ClientRunnable clientRunnable = new ClientRunnable(socket);
+				new Thread(clientRunnable).start();
+			} else {
+
+				socket.close();
+			}
 
 		} catch (UnknownHostException e) {
 			System.out.printf("Cannot recognise host: %s, make sure that the server is started%n", HOST);
