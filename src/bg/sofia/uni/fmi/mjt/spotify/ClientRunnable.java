@@ -99,17 +99,17 @@ public class ClientRunnable implements Runnable {
 
 			while (isSongPlaying && (bytesRead = receiver.read(bytesBuffer)) != -1) {
 				audioLine.write(bytesBuffer, 0, bytesRead);
-				if(bytesRead < BUFFER_SIZE) {
+				if (bytesRead < BUFFER_SIZE) {
 					stopSong();
 				}
 			}
-			
+
 			if (!isSongPlaying) {
 				System.out.println("Song stopped playing");
 			} else {
 				isSongPlaying = false;
 			}
-			
+
 			audioLine.drain();
 			audioLine.close();
 

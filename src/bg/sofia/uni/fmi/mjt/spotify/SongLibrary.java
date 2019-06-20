@@ -16,7 +16,7 @@ public class SongLibrary {
 
 	public static void setupSongLibrary() {
 		File[] files = new File(SONGS_FOLDER_PATH).listFiles();
-		
+
 		songs = new HashMap<String, Integer>();
 		for (File file : files) {
 			if (file.isFile()) {

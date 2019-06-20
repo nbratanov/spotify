@@ -23,23 +23,23 @@ public class SpotifyServer {
 
 	private static final int EMAIL_INDEX = 0;
 	private static final int PASSWORD_INDEX = 1;
-	
+
 	private static Map<String, Socket> loggedUsers = new HashMap<>();
 
 	public synchronized static String registerUser(String email, String password) {
 
 		File usersFile = new File(USERS_PATH);
-		try (BufferedReader bufferedReader = new BufferedReader(new FileReader(usersFile));
-				BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(usersFile, true))) {
+		try (BufferedReader reader = new BufferedReader(new FileReader(usersFile));
+				BufferedWriter writer = new BufferedWriter(new FileWriter(usersFile, true))) {
 			String line = null;
-			while ((line = bufferedReader.readLine()) != null) {
+			while ((line = reader.readLine()) != null) {
 				String[] tokens = line.split(" ");
 				if (tokens[0].equals(email)) {
 					return ALREADY_TAKEN_MESSAGE;
 				}
 			}
 
-			bufferedWriter.write(email + " " + password + System.lineSeparator());
+			writer.write(email + " " + password + System.lineSeparator());
 		} catch (FileNotFoundException e) {
 			System.out.println("Users file not found");
 		} catch (IOException e) {
@@ -51,9 +51,9 @@ public class SpotifyServer {
 
 	private synchronized String validatePassword(String user) {
 		File usersFile = new File(USERS_PATH);
-		try (BufferedReader bufferedReader = new BufferedReader(new FileReader(usersFile))) {
+		try (BufferedReader reader = new BufferedReader(new FileReader(usersFile))) {
 			String line = null;
-			while ((line = bufferedReader.readLine()) != null) {
+			while ((line = reader.readLine()) != null) {
 				String[] tokens = line.split(" ");
 				if (tokens[EMAIL_INDEX].equals(user)) {
 					return tokens[PASSWORD_INDEX];

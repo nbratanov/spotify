@@ -12,12 +12,12 @@ public class SpotifyClient {
 
 	private static final String HOST = "localhost";
 	private static final int PORT = 8080;
-	
+
 	private static final String VALIDATION_MESSAGE = "Successfully logged into the server";
 	private static final int COMMAND_INDEX = 0;
 	private static final int FIRST_COMMAND_PARAMETER = 1;
 	private static final int SECOND_COMMAND_PARAMETER = 2;
-	
+
 	private PrintWriter writer;
 	private BufferedReader reader;
 	private boolean isClientConnected = false;

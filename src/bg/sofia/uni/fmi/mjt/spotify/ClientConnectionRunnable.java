@@ -46,7 +46,7 @@ public class ClientConnectionRunnable implements Runnable {
 			while (true) {
 				String commandInput = reader.readLine();
 				System.out.println(commandInput);
-				
+
 				if (commandInput != null) {
 					String[] tokens = commandInput.split(" ");
 					String command = tokens[COMMAND_INDEX];
@@ -155,7 +155,7 @@ public class ClientConnectionRunnable implements Runnable {
 			System.out.println("Error playing the audio file");
 		}
 	}
-		
+
 	public void stopSong(PrintWriter writer) {
 		isSongPlaying = false;
 		writer.println(Commands.STOP.getCommandName());
@@ -210,7 +210,7 @@ public class ClientConnectionRunnable implements Runnable {
 			writer.println("There are currently no playlists created");
 			return;
 		}
-		
+
 		for (File file : playlists) {
 			if (file.getName().equals(playlistName)) {
 				try (BufferedReader fileReader = new BufferedReader(new FileReader(file))) {
@@ -222,7 +222,7 @@ public class ClientConnectionRunnable implements Runnable {
 				return;
 			}
 		}
-		
+
 		writer.println("There is no playlist: " + playlistName);
 	}
 
