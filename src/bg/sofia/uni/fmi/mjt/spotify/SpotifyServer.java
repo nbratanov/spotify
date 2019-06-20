@@ -120,7 +120,7 @@ public class SpotifyServer {
 			return null;
 		}
 
-		if (SpotifyServer.getLoggedUsers().containsKey(email)) {
+		if (getLoggedUsers().containsKey(email)) {
 			writer.println("Someone is already logged into this email");
 			return null;
 		}

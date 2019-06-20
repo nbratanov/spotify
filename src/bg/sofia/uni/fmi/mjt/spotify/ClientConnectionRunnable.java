@@ -60,7 +60,7 @@ public class ClientConnectionRunnable implements Runnable {
 					}
 					if (command.equals(Commands.PLAY.getCommandName())) {
 						String songName = transformInput(tokens, 1);
-						play(songName, writer, reader);
+						play(songName, writer);
 					}
 					if (command.equals(Commands.STOP.getCommandName())) {
 						stopSong(writer);
@@ -110,7 +110,7 @@ public class ClientConnectionRunnable implements Runnable {
 		}
 	}
 
-	public void play(String songName, PrintWriter writer, BufferedReader reader) {
+	public void play(String songName, PrintWriter writer) {
 
 		boolean ifSongExists = false;
 		File[] files = new File(FOLDER_PATH).listFiles();
