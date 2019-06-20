@@ -18,8 +18,8 @@ public class SpotifyServer {
 
 	private static final int PORT = 8080;
 	private static final String USERS_PATH = "D:\\Java\\eclipse\\Spotify\\resources\\users";
-	private static String ALREADY_TAKEN_MESSAGE = "Username is already taken";
-	private static String SUCCESSFUL_MESSAGE = "Successfully registered user: ";
+	private static final String ALREADY_TAKEN_MESSAGE = "Username is already taken";
+	private static final String SUCCESSFUL_MESSAGE = "Successfully registered user: ";
 
 	private static final int EMAIL_INDEX = 0;
 	private static final int PASSWORD_INDEX = 1;
