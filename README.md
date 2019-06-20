@@ -21,11 +21,15 @@ In order to run this project you need to have JRE 11+ . You can install it on:
 ## Usage
 
 1. **Register** and **login** through the system with:
+
 	*register [name] [password]
 	login [name] [password]*
 	
-2. **Search** different songs in your local file with path
-		*".../Spotify/resources/songs"*
+2. **Search** different songs in your local file with path:
+
+	*".../Spotify/resources/songs"*
+
+	Command for search is:
 
 	*search [keywords]*
 	
