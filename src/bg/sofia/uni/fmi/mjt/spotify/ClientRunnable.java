@@ -89,14 +89,14 @@ public class ClientRunnable implements Runnable {
 
 			DataInputStream receiver = new DataInputStream(socket.getInputStream());
 
-			while (isSongPlaying == true && (bytesRead = receiver.read(bytesBuffer)) != -1) {
+			while (isSongPlaying && (bytesRead = receiver.read(bytesBuffer)) != -1) {
 				audioLine.write(bytesBuffer, 0, bytesRead);
 				if(bytesRead < 4096) {
 					stopSong();
 				}
 			}
 			
-			if (isSongPlaying == false) {
+			if (!isSongPlaying) {
 				System.out.println("Song stopped playing");
 			} else {
 				isSongPlaying = false;

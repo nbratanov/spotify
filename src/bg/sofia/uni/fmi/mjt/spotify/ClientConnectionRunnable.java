@@ -27,7 +27,7 @@ public class ClientConnectionRunnable implements Runnable {
 
 	private String email;
 	private Socket socket;
-	private static boolean isSongPlaying;
+	private boolean isSongPlaying;
 
 	public ClientConnectionRunnable(String email, Socket socket) {
 		this.email = email;
@@ -112,15 +112,15 @@ public class ClientConnectionRunnable implements Runnable {
 
 	public void play(String songName, PrintWriter writer) {
 
-		boolean ifSongExists = false;
+		boolean songExists = false;
 		File[] files = new File(FOLDER_PATH).listFiles();
 		for (File file : files) {
 			if (file.getName().equals(songName + ".wav")) {
-				ifSongExists = true;
+				songExists = true;
 			}
 		}
 
-		if (ifSongExists == false) {
+		if (!songExists) {
 			writer.println("You cannot play a song that is not in the library.");
 			return;
 		}
@@ -139,7 +139,7 @@ public class ClientConnectionRunnable implements Runnable {
 			isSongPlaying = true;
 
 			DataOutputStream sender = new DataOutputStream(socket.getOutputStream());
-			while (isSongPlaying == true && (bytesRead = audioStream.read(bytesBuffer)) != -1) {
+			while (isSongPlaying && (bytesRead = audioStream.read(bytesBuffer)) != -1) {
 				sender.write(bytesBuffer, 0, bytesRead);
 			}
 
@@ -153,7 +153,7 @@ public class ClientConnectionRunnable implements Runnable {
 		}
 	}
 		
-	public static void stopSong(PrintWriter writer) {
+	public void stopSong(PrintWriter writer) {
 		isSongPlaying = false;
 		writer.println(Commands.STOP.getCommandName());
 	}
