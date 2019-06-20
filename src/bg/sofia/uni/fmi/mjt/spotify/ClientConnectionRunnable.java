@@ -207,6 +207,7 @@ public class ClientConnectionRunnable implements Runnable {
 			writer.println("There are currently no playlists created");
 			return;
 		}
+		
 		for (File file : playlists) {
 			if (file.getName().equals(playlistName)) {
 				try (BufferedReader fileReader = new BufferedReader(new FileReader(file))) {
@@ -215,8 +216,11 @@ public class ClientConnectionRunnable implements Runnable {
 						writer.println(line);
 					}
 				}
+				return;
 			}
 		}
+		
+		writer.println("There is no playlist: " + playlistName);
 	}
 
 	private String transformInput(String[] commandInput, int startIndex) {
