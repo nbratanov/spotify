@@ -21,6 +21,9 @@ public class SpotifyServer {
 	private static String ALREADY_TAKEN_MESSAGE = "Username is already taken";
 	private static String SUCCESSFUL_MESSAGE = "Successfully registered user: ";
 
+	private static final int EMAIL_INDEX = 0;
+	private static final int PASSWORD_INDEX = 1;
+	
 	private static Map<String, Socket> loggedUsers = new HashMap<>();
 
 	public synchronized static String registerUser(String email, String password) {
@@ -52,8 +55,8 @@ public class SpotifyServer {
 			String line = null;
 			while ((line = bufferedReader.readLine()) != null) {
 				String[] tokens = line.split(" ");
-				if (tokens[0].equals(user)) {
-					return tokens[1];
+				if (tokens[EMAIL_INDEX].equals(user)) {
+					return tokens[PASSWORD_INDEX];
 				}
 			}
 		} catch (IOException e) {
@@ -65,8 +68,8 @@ public class SpotifyServer {
 	private String approveLogin(String userDetails, PrintWriter writer) {
 
 		String[] tokens = userDetails.split(" ");
-		String email = tokens[0];
-		String password = tokens[1];
+		String email = tokens[EMAIL_INDEX];
+		String password = tokens[PASSWORD_INDEX];
 
 		String realPassword = validatePassword(email);
 		if (realPassword == null) {

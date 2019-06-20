@@ -23,6 +23,9 @@ public class ClientConnectionRunnable implements Runnable {
 	private static final String FOLDER_PATH = "D:\\Java\\eclipse\\Spotify\\resources\\songs";
 	private static final String PLAYLISTS_FOLDER_PATH = "D:\\Java\\eclipse\\Spotify\\resources\\playlists";
 
+	private static final int COMMAND_INDEX = 0;
+	private static final int FIRST_COMMAND_PARAMETER = 1;
+	private static final int SECOND_COMMAND_PARAMETER = 2;
 	private static final int BUFFER_SIZE = 4096;
 
 	private String email;
@@ -46,36 +49,36 @@ public class ClientConnectionRunnable implements Runnable {
 				
 				if (commandInput != null) {
 					String[] tokens = commandInput.split(" ");
-					String command = tokens[0];
+					String command = tokens[COMMAND_INDEX];
 
 					if (command.equals(Commands.DISCONNECT.getCommandName())) {
 						disconnect();
 					}
 					if (command.equals(Commands.SEARCH.getCommandName())) {
-						String keyWords = transformInput(tokens, 1);
+						String keyWords = transformInput(tokens, FIRST_COMMAND_PARAMETER);
 						search(keyWords, writer);
 					}
 					if (command.equals(Commands.TOP.getCommandName())) {
-						top(Integer.parseInt(tokens[1]), writer);
+						top(Integer.parseInt(tokens[FIRST_COMMAND_PARAMETER]), writer);
 					}
 					if (command.equals(Commands.PLAY.getCommandName())) {
-						String songName = transformInput(tokens, 1);
+						String songName = transformInput(tokens, FIRST_COMMAND_PARAMETER);
 						play(songName, writer);
 					}
 					if (command.equals(Commands.STOP.getCommandName())) {
 						stopSong(writer);
 					}
 					if (command.equals(Commands.CREATE_PLAYLIST.getCommandName())) {
-						String playlistName = transformInput(tokens, 1);
+						String playlistName = transformInput(tokens, FIRST_COMMAND_PARAMETER);
 						createPlaylist(playlistName, writer);
 					}
 					if (command.equals(Commands.ADD_SONG_TO_PLAYLIST.getCommandName())) {
-						String playlistName = tokens[1];
-						String songName = transformInput(tokens, 2);
+						String playlistName = tokens[FIRST_COMMAND_PARAMETER];
+						String songName = transformInput(tokens, SECOND_COMMAND_PARAMETER);
 						addSongToPlaylist(playlistName, songName, writer);
 					}
 					if (command.equals(Commands.SHOW_PLAYLIST.getCommandName())) {
-						String playlistName = transformInput(tokens, 1);
+						String playlistName = transformInput(tokens, FIRST_COMMAND_PARAMETER);
 						showPlaylist(playlistName, writer);
 					}
 				}

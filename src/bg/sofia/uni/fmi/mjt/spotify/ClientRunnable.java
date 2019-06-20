@@ -18,6 +18,14 @@ public class ClientRunnable implements Runnable {
 	private static final int BUFFER_SIZE = 4096;
 	private static final String AUDIO_FORMAT = "audioFormat";
 
+	private static final int ENCODING_INDEX = 1;
+	private static final int SAMPLE_RATE_INDEX = 2;
+	private static final int SAMPLE_SIZE_INDEX = 3;
+	private static final int CHANNELS_INDEX = 4;
+	private static final int FRAME_SIZE_INDEX = 5;
+	private static final int FRAME_RATE_INDEX = 6;
+	private static final int BIG_ENDIAN_INDEX = 7;
+
 	private Socket socket;
 	private boolean isSongPlaying;
 
@@ -63,13 +71,13 @@ public class ClientRunnable implements Runnable {
 
 		String[] formatParameters = format.split(" ");
 
-		Encoding encoding = new Encoding(formatParameters[1]);
-		float sampleRate = Float.parseFloat(formatParameters[2]);
-		int sampleSizeInBits = Integer.parseInt(formatParameters[3]);
-		int channels = Integer.parseInt(formatParameters[4]);
-		int frameSize = Integer.parseInt(formatParameters[5]);
-		float frameRate = Float.parseFloat(formatParameters[6]);
-		boolean bigEndian = Boolean.parseBoolean(formatParameters[7]);
+		Encoding encoding = new Encoding(formatParameters[ENCODING_INDEX]);
+		float sampleRate = Float.parseFloat(formatParameters[SAMPLE_RATE_INDEX]);
+		int sampleSizeInBits = Integer.parseInt(formatParameters[SAMPLE_SIZE_INDEX]);
+		int channels = Integer.parseInt(formatParameters[CHANNELS_INDEX]);
+		int frameSize = Integer.parseInt(formatParameters[FRAME_SIZE_INDEX]);
+		float frameRate = Float.parseFloat(formatParameters[FRAME_RATE_INDEX]);
+		boolean bigEndian = Boolean.parseBoolean(formatParameters[BIG_ENDIAN_INDEX]);
 
 		try {
 			AudioFormat audioFormat = new AudioFormat(encoding, sampleRate, sampleSizeInBits, channels, frameSize,
@@ -91,7 +99,7 @@ public class ClientRunnable implements Runnable {
 
 			while (isSongPlaying && (bytesRead = receiver.read(bytesBuffer)) != -1) {
 				audioLine.write(bytesBuffer, 0, bytesRead);
-				if(bytesRead < 4096) {
+				if(bytesRead < BUFFER_SIZE) {
 					stopSong();
 				}
 			}

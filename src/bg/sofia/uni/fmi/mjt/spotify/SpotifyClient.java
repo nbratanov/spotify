@@ -12,8 +12,12 @@ public class SpotifyClient {
 
 	private static final String HOST = "localhost";
 	private static final int PORT = 8080;
+	
 	private static final String VALIDATION_MESSAGE = "Successfully logged into the server";
-
+	private static final int COMMAND_INDEX = 0;
+	private static final int FIRST_COMMAND_PARAMETER = 1;
+	private static final int SECOND_COMMAND_PARAMETER = 2;
+	
 	private PrintWriter writer;
 	private BufferedReader reader;
 	private boolean isClientConnected = false;
@@ -25,7 +29,7 @@ public class SpotifyClient {
 			while (true) {
 				String[] commandInput = sc.nextLine().split(" ");
 
-				String command = commandInput[0];
+				String command = commandInput[COMMAND_INDEX];
 
 				if (command.equals(Commands.REGISTER.getCommandName())) {
 					register(commandInput);
@@ -50,8 +54,8 @@ public class SpotifyClient {
 
 	public void register(String[] commandInput) {
 
-		String email = commandInput[1];
-		String password = commandInput[2];
+		String email = commandInput[FIRST_COMMAND_PARAMETER];
+		String password = commandInput[SECOND_COMMAND_PARAMETER];
 
 		String message = SpotifyServer.registerUser(email, password);
 		System.out.println(message);
@@ -65,8 +69,8 @@ public class SpotifyClient {
 			reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			writer = new PrintWriter(socket.getOutputStream(), true);
 
-			String email = commandInput[1];
-			String password = commandInput[2];
+			String email = commandInput[FIRST_COMMAND_PARAMETER];
+			String password = commandInput[SECOND_COMMAND_PARAMETER];
 
 			writer.println(email + " " + password);
 
