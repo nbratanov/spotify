@@ -34,7 +34,7 @@ public class SpotifyServer {
 			String line = null;
 			while ((line = reader.readLine()) != null) {
 				String[] tokens = line.split(" ");
-				if (tokens[0].equals(email)) {
+				if (tokens[EMAIL_INDEX].equals(email)) {
 					return ALREADY_TAKEN_MESSAGE;
 				}
 			}
@@ -49,7 +49,7 @@ public class SpotifyServer {
 		return SUCCESSFUL_MESSAGE + email;
 	}
 
-	private synchronized String validatePassword(String user) {
+	private String validatePassword(String user) {
 		File usersFile = new File(USERS_PATH);
 		try (BufferedReader reader = new BufferedReader(new FileReader(usersFile))) {
 			String line = null;
@@ -65,7 +65,7 @@ public class SpotifyServer {
 		return null;
 	}
 
-	private String approveLogin(String userDetails, PrintWriter writer) {
+	private synchronized String approveLogin(String userDetails, PrintWriter writer) {
 
 		String[] tokens = userDetails.split(" ");
 		String email = tokens[EMAIL_INDEX];
